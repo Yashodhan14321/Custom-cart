@@ -146,12 +146,15 @@ function search()
 	text1+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
 	text1+="</div><div style='";
 	text1+="width:50%; height:70px; float:right;'><button class='.btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem(";
-	text1+=i+")>DELETE</button><br>";
+	text1+=i+")>DELETE</button>";
+	text1+="<br><br><button class='btn' style='border-radius:5px; border-color:transparent; background-color:blue; color:#fff;' onclick=edit("+i+")>EDIT</button></div><br>";
 	document.getElementById("searchresult").innerHTML=text1;
 	text1="";
 }
 function edit(i)
 {
+	$("#searchresult").slideUp();
+  	$("#myform").slideUp();
 	console.log(i);
 	var edittext="";
 	edittext+="<input type='text'  id='itemna' value='"+Itemname[i]+"' required='Item name is necessary'/>"
