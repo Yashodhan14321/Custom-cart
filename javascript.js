@@ -17,6 +17,33 @@ function show()
 {
 	document.getElementById("myform").style.visibility = "visible";
 }
+function display()
+{
+	text="";
+	if(Itemname.length==0)
+	{
+		localStorage.clear();
+	}
+	for (i = 0; i < Itemname.length; i++)
+	{
+  		text+="<div style='";
+  		if(i!=0)
+  		{
+  			text+="margin-top:25px;";
+  		}
+  		text+="width:50%; height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
+  		text+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
+  		text+="</div><div style='";
+  		if(i!=0)
+  		{
+  			text+="margin-top:25px;";
+  		}
+  		text+="width:50%; height:70px; float:right;'><button class='btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem("+i+")>DELETE</button>";
+  		text+="<br><br><button class='btn' style='border-radius:5px; border-color:transparent; background-color:blue; color:#fff;' onclick=edit("+i+")>EDIT</button></div><br>";
+	}
+	document.getElementById("showval").innerHTML =text;
+	text="";
+}
 function additem(){
 	location.reload();
 	document.getElementById("searchresult").style.visibility = "hidden";
@@ -62,25 +89,7 @@ function additem(){
 	Price = (localStorage.getItem('2')).split(',');
 	Quantity = (localStorage.getItem('3')).split(',');
 
-	for (i = 0; i < Itemname.length; i++)
-	{
-  		text+="<div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
-  		text+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
-  		text+="</div><div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:right;'><button class='.btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem(";
-  		text+=i+")>DELETE</button></div><br>";
-	}
-	document.getElementById("showval").innerHTML =text;
-	text="";
+	display();
 	document.getElementById("myform").style.visibility = "hidden";
 	open=0;
 }
@@ -113,30 +122,15 @@ function deleteitem(i){
 	Itemdesc.splice(1, i);
 	Price.splice(1, i);
 	Quantity.splice(1, i);
-	Itemname = (localStorage.getItem('0')).split(',');
-	Itemdesc = (localStorage.getItem('1')).split(',');
-	Price = (localStorage.getItem('2')).split(',');
-	Quantity = (localStorage.getItem('3')).split(',');
-	for (i = 0; i < Itemname.length; i++)
+	localStorage.clear();
+	if(Itemname!=null)
 	{
-  		text+="<div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
-  		text+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
-  		text+="</div><div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:right;'><button class='.btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem(";
-  		text+=i+")>DELETE</button></div><br>";
+		localStorage.setItem('0',Itemname);
+		localStorage.setItem('1',Itemdesc);
+		localStorage.setItem('2',Price);
+		localStorage.setItem('3',Quantity);
+		display();
 	}
-	console.log(text);
-	document.getElementById("showval").innerHTML =text;
-	text="";
 }
 function clearlist()
 {
@@ -156,45 +150,79 @@ function search()
 	document.getElementById("searchresult").innerHTML=text1;
 	text1="";
 }
-function display()
-{
-	for (i = 0; i < Itemname.length; i++)
-	{
-  		text+="<div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
-  		text+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
-  		text+="</div><div style='";
-  		if(i!=0)
-  		{
-  			text+="margin-top:25px;";
-  		}
-  		text+="width:50%; height:70px; float:right;'><button class='btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem(";
-  		text+=i+")>DELETE</button>";
-  		text+="<br><br><button class='btn' style='border-radius:5px; border-color:transparent; background-color:blue; color:#fff;' onclick=edit("+i+")>EDIT</button></div><br>";
-	}
-	console.log(text);
-	document.getElementById("showval").innerHTML =text;
-	text="";
-}
 function edit(i)
 {
+	console.log(i);
+	var edittext="";
+	edittext+="<input type='text'  id='itemna' value='"+Itemname[i]+"' required='Item name is necessary'/>"
+	edittext+="<br>";
+	edittext+="<input type='text' id='itemde' value='"+Itemdesc[i]+"' required='Item description is necessary'/>"
+	edittext+="<br>";
+	edittext+="<input type='number' id='pr' style='width: 190px; height: 16px;' value='"+Price[i]+"' required='Invalid value'/>";
+	edittext+="<br>";
+	edittext+="<input type='number' id='qa' style='width: 190px; height: 16px;' value='"+Quantity[i]+"' required='Invalid value'/>"
+	edittext+="<br>";
+	edittext+="<button type='submit' id='edit' onclick='edititem("+i+")' class='.btn' style='margin-top:15px; width: 120px; font-size: 16px; height: 30px; background-color: red; color: #fff; border-radius: 5px; border-color: transparent;'>EDIT";
+	edittext+="</button>";
+	document.getElementById("ediForm").innerHTML = edittext;
+	document.getElementById("ediForm").style.visibility = "visible";
+	$("#ediform").slideDown();
+}
+function edititem(i)
+{
+	console.log(i);
+	var itemna = document.getElementById("itemna");
+	var itemnde = document.getElementById("itemde");
+	var pr = document.getElementById("pr");
+	var qa = document.getElementById("qa");
+	if(itemde.value.length<=8)
+	{
+		console.log("desc");
+		alert("Description must be 8 or greater in length");
+		return false;
+	}
+	if(qa.value<=0)
+	{
+		alert("Quantity cannot be zero");
+		return false;
+	}
+	for(i=0;i<Itemname.length;i++)
+	{
+		if((itemname.value).localeCompare(itemna.value)==0)
+		{
+			alert("VALUE IS NOT UNIQUE");
+			return false;
+		}
+	}
+	Itemname[i-1]=itemna.value;
+	Itemdesc[i-1]=itemde.value;
+	Price[i-1] = pr.value;
+	Quantity[i-1]=qa.value;
 
+	localStorage.setItem('0',Itemname);
+	localStorage.setItem('1',Itemdesc);
+	localStorage.setItem('2',Price);
+	localStorage.setItem('3',Quantity);
+
+	$("#ediform").slideUp();
+	display();
 }
 $(document).ready(function(){
   $("#searchresult").slideUp();
   $("#myform").slideUp();
+  $("#ediform").slideUp();
   $("#hide").click(function(){
     $("#searchresult").slideUp();
     $("#myform").slideDown();
+    $("#ediform").slideUp();
   });
+  
   $(".glyphicon").click(function(){
     $("#searchresult").slideDown();
     $("#myform").slideUp();
+    $("#ediform").slideUp();
   });
+  
   $("#add").click(function(){
     $("#myform").slideUp();
   });
