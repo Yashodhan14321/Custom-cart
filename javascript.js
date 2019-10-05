@@ -2,6 +2,12 @@ var Itemname =new Array();
 var Itemdesc = new Array();
 var Price = new Array();
 var Quantity = new Array();
+
+var cartItemname =new Array();
+var cartItemdesc = new Array();
+var cartPrice = new Array();
+var cartQuantity = new Array();
+
 var i=0;
 var d =0;
 var text="";
@@ -12,6 +18,11 @@ var text="";
 		Itemdesc = (localStorage.getItem('1')).split(',');
 		Price = (localStorage.getItem('2')).split(',');
 		Quantity = (localStorage.getItem('3')).split(',');
+		
+		cartItemname = (localStorage.getItem('4')).split(',');
+		cartItemdesc = (localStorage.getItem('5')).split(',');
+		cartPrice = (localStorage.getItem('6')).split(',');
+		cartQuantity = (localStorage.getItem('7')).split(',');
 	}
 function show()
 {
@@ -26,20 +37,27 @@ function display()
 	}
 	for (i = 0; i < Itemname.length; i++)
 	{
-  		text+="<div style='";
+		text+="<div class='row'>";
+  		text+="<div class='col-sm-4' style='";
   		if(i!=0)
   		{
   			text+="margin-top:25px;";
   		}
-  		text+="width:50%; height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
+  		text+="height:70px; float:left; font-size:16px; float:left;'>"+Itemname[i];
   		text+="<br>"+Itemdesc[i]+"<br>Price: "+Price[i]+"<br>Quantity: "+Quantity[i];
-  		text+="</div><div style='";
+  		text+="</div><div class='col-sm-4' style='";
   		if(i!=0)
   		{
   			text+="margin-top:25px;";
   		}
-  		text+="width:50%; height:70px; float:right;'><button class='btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem("+i+")>DELETE</button>";
-  		text+="<br><br><button class='btn' style='border-radius:5px; border-color:transparent; background-color:blue; color:#fff;' onclick=edit("+i+")>EDIT</button></div><br>";
+  		text+="height:70px; float:right;'><button class='btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deleteitem("+i+")>DELETE</button>";
+  		text+="<br><br><button class='btn' style='border-radius:5px; border-color:transparent; background-color:blue; color:#fff;' onclick=edit("+i+")>EDIT</button></div>";
+  		text+="<div class='col-sm-3' style='";
+  		if(i!=0)
+  		{
+  			text+="margin-top:25px;";
+  		}
+  		text+="height:70px'><button id='cart' style='margin-top:15px; color:#fff; background-color:green; border-radius:5px; width:140px; height:40px;' class='btn' onclick='addtocart("+i+")'><span class='glyphicon glyphicon-shopping-cart'></span>ADD TO CART</BUTTON></div></div>";
 	}
 	document.getElementById("showval").innerHTML =text;
 	text="";
@@ -189,18 +207,18 @@ function edititem(i)
 		alert("Quantity cannot be zero");
 		return false;
 	}
-	for(i=0;i<Itemname.length;i++)
+	for(j=0;j<Itemname.length;j++)
 	{
-		if((itemname.value).localeCompare(itemna.value)==0)
+		if((itemna.value).localeCompare(Itemname[j])==0)
 		{
 			alert("VALUE IS NOT UNIQUE");
 			return false;
 		}
 	}
-	Itemname[i-1]=itemna.value;
-	Itemdesc[i-1]=itemde.value;
-	Price[i-1] = pr.value;
-	Quantity[i-1]=qa.value;
+	Itemname[i]=itemna.value;
+	Itemdesc[i]=itemde.value;
+	Price[i] = pr.value;
+	Quantity[i]=qa.value;
 
 	localStorage.setItem('0',Itemname);
 	localStorage.setItem('1',Itemdesc);
@@ -209,6 +227,35 @@ function edititem(i)
 
 	$("#ediform").slideUp();
 	display();
+}
+function addtocart(i)
+{
+	alert("ITEM ADDED TO CART");
+	cartItemname.push(Itemname[i]);
+	cartItemdesc.push(Itemdesc[i]);
+	cartPrice.push(Price[i]);
+	cartQuantity.push(Quantity[i]);
+	JSON.stringify(cartItemname);
+	JSON.stringify(cartItemdesc);
+	JSON.stringify(cartPrice);
+	JSON.stringify(cartQuantity);
+	localStorage.setItem('4',cartItemname);
+	localStorage.setItem('5',cartItemdesc);
+	localStorage.setItem('6',cartPrice);
+	localStorage.setItem('7',cartQuantity);
+
+	cartItemname = (localStorage.getItem('4')).split(',');
+	cartItemdesc = (localStorage.getItem('5')).split(',');
+	cartPrice = (localStorage.getItem('6')).split(',');
+	cartQuantity = (localStorage.getItem('7')).split(',');
+}
+function displaycart()
+{
+	var cart="";
+	for(i=0;i<cartItemname.length;i++)
+	{
+		cart+="<div>"+cartItemname[i]+"<br>"+cartItemdesc
+	}
 }
 $(document).ready(function(){
   $("#searchresult").slideUp();

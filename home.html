@@ -14,10 +14,13 @@
   	</style>
 </head>
 <body onload="display()">
-	<button class=".btn-danger" style="border-color:transparent; width:120px; font-size: 16px; height: 30px; margin-top:40px; margin-left:40px; border-radius: 5px; background-color:red;color:#fff;" onclick="clearlist()">CLEAR LIST</button>
+	<button style="border-color:transparent; width:120px; font-size: 16px; height: 30px; margin-top:40px; margin-left:40px; border-radius: 5px; background-color:red;color:#fff;" onclick="clearlist()">CLEAR LIST</button>
+	<a style="text-decoration: none;" href="cart.html">
+		<button style="border-color:transparent; width:120px; font-size: 16px; float: right; height: 30px; margin-top:40px; margin-right:40px; border-radius: 5px; background-color:green; color:#fff;"><span class="glyphicon glyphicon-shopping-cart"></span>MY CART</button>
+	</a>
 	<center style="position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);">
 		<h1 style="color: #000; font-weight: 800;">LIST OF PRODUCTS</h1>
-		<div id = "showval" style="width:70%; height: 90px; overflow-y:auto;">
+		<div id = "showval" style="width:500px; height: 95px; overflow-y:auto; overflow-x:hidden; ">
 			
 		</div>
 		<button id="hide" class=".btn" style="margin-top:30px; width: 200px; font-size: 16px; height: 60px; background-color: blue; color: #fff; border-radius: 5px; border-color: transparent;" onclick="show()">ADD NEW PRODUCTS
