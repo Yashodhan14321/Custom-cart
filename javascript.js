@@ -37,7 +37,16 @@ function display()
 	}
 	for (i = 0; i < Itemname.length; i++)
 	{
-		text+="<div class='row'>";
+		text+="<div style='position:relative;' class='row'>";
+		if(Quantity[i]==0)
+		{
+			text+="<div style='";
+			if(i!=0)
+			{
+				text+="margin-top:25px;";
+			}
+			text+="background-color:rgba(255,255,0,0.6); border-radius:10px; position:absolute; z-index:10; width:100%; height:90px;'><center style='position:absolute;top:50%; left:50%; transform:translate(-50%, -50%); color:red; font-size:34px; font-weight:900'>OUT OF STOCK</center></div>"
+		}
   		text+="<div class='col-sm-4' style='";
   		if(i!=0)
   		{
@@ -230,15 +239,34 @@ function edititem(i)
 }
 function addtocart(i)
 {
+	var d=0;
+	for(j=0;j<cartItemname.length;j++)
+	{
+		if(cartItemname[j]==Itemname[i])
+		{
+			var t = parseInt(cartQuantity[j]);
+			t=t+1;
+			cartQuantity[j] = t;
+			d=1;
+			Quantity[i]= Quantity[i]-1;
+			break;
+		}
+	}
 	alert("ITEM ADDED TO CART");
-	cartItemname.push(Itemname[i]);
-	cartItemdesc.push(Itemdesc[i]);
-	cartPrice.push(Price[i]);
-	cartQuantity.push(Quantity[i]);
+	if(d==0)
+	{
+		Quantity[i]= Quantity[i]-1;
+		cartItemname.push(Itemname[i]);
+		cartItemdesc.push(Itemdesc[i]);
+		cartPrice.push(Price[i]);
+		cartQuantity.push(1);
+	}
 	JSON.stringify(cartItemname);
 	JSON.stringify(cartItemdesc);
 	JSON.stringify(cartPrice);
 	JSON.stringify(cartQuantity);
+	JSON.stringify(Quantity);
+	localStorage.setItem('3',Quantity);
 	localStorage.setItem('4',cartItemname);
 	localStorage.setItem('5',cartItemdesc);
 	localStorage.setItem('6',cartPrice);
@@ -248,14 +276,31 @@ function addtocart(i)
 	cartItemdesc = (localStorage.getItem('5')).split(',');
 	cartPrice = (localStorage.getItem('6')).split(',');
 	cartQuantity = (localStorage.getItem('7')).split(',');
+	location.reload();
 }
 function displaycart()
 {
-	var cart="";
-	for(i=0;i<cartItemname.length;i++)
+	text="";
+	for (i = 0; i < cartItemname.length; i++)
 	{
-		cart+="<div>"+cartItemname[i]+"<br>"+cartItemdesc
+		text+="<div class='row'>";
+  		text+="<div class='col-sm-4' style='";
+  		if(i!=0)
+  		{
+  			text+="margin-top:25px;";
+  		}
+  		text+="height:70px; width:50%; float:left; font-size:16px; float:left;'>"+cartItemname[i];
+  		text+="<br>"+cartItemdesc[i]+"<br>Price: "+cartPrice[i]+"<br>Quantity: "+cartQuantity[i];
+  		text+="</div><div class='col-sm-4' style='";
+  		if(i!=0)
+  		{
+  			text+="margin-top:25px;";
+  		}
+  		text+="height:70px; width:50%; float:right;'><button class='btn' style='background-color:red;border-color:transparent; color:#fff; border-radius:5px;' onclick=deletecartitem("+i+")>DELETE</button>";
+  		text+="</div>";
 	}
+	document.getElementById("showcartitems").innerHTML =text;
+	text="";
 }
 $(document).ready(function(){
   $("#searchresult").slideUp();
